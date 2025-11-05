@@ -84,7 +84,7 @@ const Introduction = () => {
             <Button 
               variant="outline"
               size="lg" 
-              onClick={() => navigate("/study")}
+              onClick={() => navigate("/info")}
             >
               <span className="text-foreground">Studie starten</span>
             </Button>
