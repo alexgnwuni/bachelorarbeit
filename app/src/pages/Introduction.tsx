@@ -1,11 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Brain, Target, Users } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Introduction = () => {
+  const navigate = useNavigate();
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4 my-10">
-      <div className="w-full space-y-8 animate-in fade-in duration-700 mx-40">
+      <div className="container max-w-5xl mx-auto space-y-8 animate-in fade-in duration-700">
         {/* Header */}
         <div className="text-center space-y-4 mx-auto">
           <h1 className="text-4xl font-bold text-foreground">
@@ -34,7 +36,7 @@ const Introduction = () => {
             <div className="flex items-start space-x-3 p-4 rounded-lg bg-background/50">
               <Target className="w-5 h-5 text-primary mt-0.5" />
               <div>
-                <h3 className="font-medium text-foreground mb-1">5 Szenarien</h3>
+                <h3 className="font-medium text-foreground mb-1">4 Szenarien</h3>
                 <p className="text-sm text-muted-foreground">
                   Verschiedene Situationen aus dem Alltag
                 </p>
@@ -67,7 +69,7 @@ const Introduction = () => {
               <li>Chatten Sie frei mit dem KI-System (mindestens 3 Nachrichten)</li>
               <li>Bewerten Sie, ob die KI-Antworten verzerrt waren</li>
               <li>Begründen Sie Ihre Einschätzung</li>
-              <li>Wiederholen Sie dies für alle 5 Szenarien</li>
+              <li>Wiederholen Sie dies für alle 4 Szenarien</li>
             </ol>
           </div>
 
@@ -82,7 +84,7 @@ const Introduction = () => {
             <Button 
               variant="outline"
               size="lg" 
-              onClick={() => console.log("Studie starten")}
+              onClick={() => navigate("/study")}
             >
               <span className="text-foreground">Studie starten</span>
             </Button>
