@@ -26,6 +26,16 @@ const ScenarioChat = ({ scenario, onComplete }: ScenarioChatProps) => {
     scrollToBottom();
   }, [messages]);
 
+  // Show opening question on mount if available
+  useEffect(() => {
+    if (messages.length === 0 && scenario.openingQuestion) {
+      setMessages([{
+        role: 'assistant',
+        content: scenario.openingQuestion
+      }]);
+    }
+  }, [scenario.openingQuestion]);
+
   const sendMessage = async () => {
     if (!input.trim() || isLoading) return;
     if (!OPENAI_API_KEY) {
@@ -43,6 +53,22 @@ const ScenarioChat = ({ scenario, onComplete }: ScenarioChatProps) => {
     setIsLoading(true);
 
     try {
+      // Build messages array for API call with opening question
+      const messagesForAPI: ChatMessage[] = [];
+      
+      if (messages.length === 0 && scenario.openingQuestion) {
+        messagesForAPI.push({
+          role: 'assistant',
+          content: scenario.openingQuestion
+        });
+      }
+      
+      // Add all existing messages (which should include opening question if it was shown)
+      messagesForAPI.push(...messages);
+      
+      // Add the new user message
+      messagesForAPI.push(userMessage);
+
       const response = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
         headers: {
@@ -56,8 +82,7 @@ const ScenarioChat = ({ scenario, onComplete }: ScenarioChatProps) => {
               role: 'system',
               content: scenario.systemPrompt
             },
-            ...messages,
-            userMessage
+            ...messagesForAPI
           ],
           temperature: 0.7,
           max_tokens: 500,
@@ -89,7 +114,7 @@ const ScenarioChat = ({ scenario, onComplete }: ScenarioChatProps) => {
     }
   };
 
-  const canComplete = messages.filter(m => m.role === 'user').length >= 3;
+  const canComplete = messages.filter(m => m.role === 'user').length >= 1;
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500 w-full">
@@ -173,7 +198,7 @@ const ScenarioChat = ({ scenario, onComplete }: ScenarioChatProps) => {
           
           {!canComplete && (
             <p className="text-xs text-muted-foreground text-center">
-              Senden Sie mindestens 3 Nachrichten, bevor Sie fortfahren können
+              Senden Sie mindestens 1 Nachricht, bevor Sie fortfahren können
             </p>
           )}
         </div>
