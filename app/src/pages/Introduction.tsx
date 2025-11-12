@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Brain, Target, Users } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import Leaderboard from "@/components/Leaderboard";
 
 const Introduction = () => {
   const navigate = useNavigate();
@@ -19,7 +20,7 @@ const Introduction = () => {
         </div>
 
         {/* Main Card */}
-        <Card className="p-8 space-y-6 shadow-medium bg-gradient-card ">
+        <Card className="p-8 space-y-6 shadow-md bg-card">
           <div className="space-y-4">
             <h2 className="text-2xl font-semibold text-foreground">
               Willkommen zur Studie
@@ -81,7 +82,7 @@ const Introduction = () => {
           </div>
 
           <div className="flex justify-center pt-4">
-            <Button 
+            <Button
               variant="outline"
               size="lg" 
               onClick={() => navigate("/info")}
@@ -90,6 +91,9 @@ const Introduction = () => {
             </Button>
           </div>
         </Card>
+
+        {/* Leaderboard */}
+        <Leaderboard />
 
         {/* Footer */}
         <p className="text-center text-sm text-muted-foreground">
