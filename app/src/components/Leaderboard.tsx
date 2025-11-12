@@ -33,7 +33,7 @@ const Leaderboard = () => {
   if (isLoading) {
     return (
       <Card className="p-4 md:p-6 shadow-md">
-        <h2 className="text-lg md:text-xl font-semibold text-foreground mb-4">Aktuelle Rangliste</h2>
+        <h2 className="text-base md:text-xl font-semibold text-foreground mb-4">Aktuelle Rangliste</h2>
         <p className="text-sm text-muted-foreground">Lade Rangliste...</p>
       </Card>
     );
@@ -42,7 +42,7 @@ const Leaderboard = () => {
   if (entries.length === 0) {
     return (
       <Card className="p-4 md:p-6 shadow-md">
-        <h2 className="text-lg md:text-xl font-semibold text-foreground mb-4">Aktuelle Rangliste</h2>
+        <h2 className="text-base md:text-xl font-semibold text-foreground mb-4">Aktuelle Rangliste</h2>
         <p className="text-sm text-muted-foreground">Noch keine Einträge vorhanden.</p>
       </Card>
     );

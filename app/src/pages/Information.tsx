@@ -87,12 +87,12 @@ const Information = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="container max-w-5xl mx-auto px-4 py-10">
-        <Card className="p-6">
+      <div className="container max-w-5xl mx-auto px-3 md:px-4 py-6 md:py-10">
+        <Card className="p-4 md:p-6">
           <h1 className="text-base md:text-lg font-semibold">Eine kurze Information</h1>
-          <p className="text-sm text-muted-foreground mt-1">Bitte geben Sie Ihre Informationen an (optional).</p>
+          <p className="text-xs md:text-sm text-muted-foreground mt-1">Bitte geben Sie Ihre Informationen an (optional).</p>
 
-          <div className="mt-8 space-y-6">
+          <div className="mt-4 md:mt-8 space-y-4 md:space-y-6">
             {/* Username Input */}
             <div className="space-y-2">
               <Label htmlFor="username" className="text-sm font-medium text-foreground">
@@ -150,11 +150,11 @@ const Information = () => {
               </p>
             </div>
 
-            <div className="mt-6 flex gap-3">
-              <Button className="bg-primary text-primary-foreground" onClick={onContinue}>
+            <div className="mt-4 md:mt-6 flex flex-col sm:flex-row gap-2 md:gap-3">
+              <Button className="bg-primary text-primary-foreground w-full sm:w-auto" onClick={onContinue}>
                 Weiter
               </Button>
-              <Button variant="ghost" onClick={async () => {
+              <Button variant="ghost" className="w-full sm:w-auto" onClick={async () => {
                 try {
                   const participant = await ensureParticipant(undefined, null, username.trim() || null)
                   if (participant?.id) setStoredParticipantId(participant.id)

@@ -119,7 +119,7 @@ const ScenarioChat = ({ scenario, onComplete }: ScenarioChatProps) => {
   return (
     <div className="space-y-6 animate-in fade-in duration-500 w-full">
       <Card className="p-4 md:p-6 shadow-md">
-        <h2 className="text-xl md:text-2xl font-semibold text-foreground mb-2">
+        <h2 className="text-base md:text-2xl font-semibold text-foreground mb-2">
           {scenario.title}
         </h2>
         <p className="text-muted-foreground">
@@ -132,8 +132,8 @@ const ScenarioChat = ({ scenario, onComplete }: ScenarioChatProps) => {
         </div>
       </Card>
 
-      <Card className="h-[500px] flex flex-col shadow-md">
-        <div className="flex-1 overflow-y-auto p-6 space-y-4">
+      <Card className="h-[400px] md:h-[500px] flex flex-col shadow-md">
+        <div className="flex-1 overflow-y-auto p-3 md:p-6 space-y-4">
           {messages.length === 0 ? (
             <div className="h-full flex items-center justify-center text-muted-foreground">
               Beginnen Sie das Gespräch mit dem KI-System...
@@ -167,7 +167,7 @@ const ScenarioChat = ({ scenario, onComplete }: ScenarioChatProps) => {
         </div>
 
         {/* Input Feld */}
-        <div className="border-t p-4 space-y-3">
+        <div className="border-t p-3 md:p-4 space-y-2 md:space-y-3">
           <div className="flex gap-2">
             <Input
               value={input}

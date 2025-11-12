@@ -114,14 +114,14 @@ const Study = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background my-5">
+    <div className="min-h-screen bg-background my-2 md:my-5">
       <StudyProgress 
         current={currentScenarioIndex + 1} 
         total={randomizedScenarios.length}
         totalPoints={pointsSoFar}
       />
       
-      <div className="container max-w-5xl mx-auto px-4 py-8">
+      <div className="container max-w-5xl mx-auto px-3 md:px-4 py-4 md:py-8">
         {showSummary && latestAssessment ? (
           <ScenarioSummary 
             scenario={currentScenario}

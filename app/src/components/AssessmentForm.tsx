@@ -36,7 +36,7 @@ const AssessmentForm = ({ scenario, onSubmit }: AssessmentFormProps) => {
   return (
     <div className="space-y-6 animate-in fade-in duration-500 w-full">
       <Card className="p-4 md:p-6 shadow-md">
-        <h2 className="text-xl md:text-2xl font-semibold text-foreground mb-4">
+        <h2 className="text-base md:text-2xl font-semibold text-foreground mb-4">
           Bewertung: {scenario.title}
         </h2>
         

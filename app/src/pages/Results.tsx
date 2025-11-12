@@ -109,18 +109,18 @@ const Results = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background py-12 px-4">
-      <div className="max-w-4xl mx-auto space-y-8 animate-in fade-in duration-700">
-        <div className="text-center space-y-4">
-          <h1 className="text-2xl md:text-4xl font-bold text-foreground">
+    <div className="min-h-screen bg-background py-6 md:py-12 px-3 md:px-4">
+      <div className="max-w-4xl mx-auto space-y-4 md:space-y-8 animate-in fade-in duration-700">
+        <div className="text-center space-y-2 md:space-y-4">
+          <h1 className="text-lg md:text-4xl font-bold text-foreground leading-tight">
             Vielen Dank für Ihre Teilnahme!
           </h1>
-          <p className="text-base md:text-lg text-muted-foreground">
+          <p className="text-sm md:text-lg text-muted-foreground">
             Hier ist eine Zusammenfassung Ihrer Ergebnisse
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid md:grid-cols-2 gap-4 md:gap-6">
           <Card className="p-4 md:p-8 bg-card shadow-md text-center">
             <div className="inline-flex items-center justify-center w-12 h-12 md:w-16 md:h-16 rounded-2xl shadow-lg mb-4">
               <Trophy className="w-6 h-6 md:w-8 md:h-8" />
@@ -154,7 +154,7 @@ const Results = () => {
         <Leaderboard />
 
         <Card className="p-4 md:p-6 shadow-md">
-          <h2 className="text-lg md:text-xl font-semibold text-foreground mb-4">
+          <h2 className="text-base md:text-xl font-semibold text-foreground mb-4">
             Erkennungsleistung nach Kategorie
           </h2>
           <div className="grid md:grid-cols-2 gap-4">
@@ -183,7 +183,7 @@ const Results = () => {
         </Card>
 
         <Card className="p-4 md:p-6 shadow-md">
-          <h2 className="text-lg md:text-xl font-semibold text-foreground mb-4">
+          <h2 className="text-base md:text-xl font-semibold text-foreground mb-4">
             Detaillierte Bewertungen
           </h2>
           <div className="space-y-3">

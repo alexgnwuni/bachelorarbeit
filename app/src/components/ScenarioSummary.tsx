@@ -63,7 +63,7 @@ const ScenarioSummary = ({ assessment, onContinue, isLastScenario }: ScenarioSum
               <XCircle className="w-16 h-16 md:w-24 md:h-24 text-destructive animate-in zoom-in-50" />
             )}
           </div>
-          <CardTitle className="text-xl md:text-3xl font-bold">
+          <CardTitle className="text-lg md:text-3xl font-bold">
             {assessment.isCorrect ? "Perfekt erkannt!" : "Nicht ganz richtig"}
           </CardTitle>
           <p className="text-muted-foreground mt-2">
