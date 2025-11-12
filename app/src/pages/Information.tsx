@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { ensureParticipant, createSession, setStoredSessionId, setStoredParticipantId } from "@/lib/studyStore";
 
 const MIN_AGE = 6;
 const MAX_AGE = 100;
@@ -63,11 +64,22 @@ const Information = () => {
     containerRef.current.scrollTo({ top: index * itemHeight - itemHeight, behavior: "smooth" });
   };
 
-  const onContinue = () => {
-    if (age !== null) {
-      localStorage.setItem("participantAge", String(age));
+  const onContinue = async () => {
+    try {
+      if (age !== null) {
+        localStorage.setItem("participantAge", String(age));
+      }
+      // Create participant (with age) → session
+      const participant = await ensureParticipant(undefined, age ?? null)
+      if (participant?.id) setStoredParticipantId(participant.id)
+      const session = await createSession(participant?.id)
+      setStoredSessionId(session.id)
+      navigate("/study");
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.error('Failed to initialize session', e)
+      navigate("/study");
     }
-    navigate("/study");
   };
 
   return (
@@ -122,7 +134,15 @@ const Information = () => {
               <Button className="bg-primary text-primary-foreground" onClick={onContinue}>
                 Weiter
               </Button>
-              <Button variant="ghost" onClick={() => navigate("/study")}>Überspringen</Button>
+              <Button variant="ghost" onClick={async () => {
+                try {
+                  const participant = await ensureParticipant()
+                  if (participant?.id) setStoredParticipantId(participant.id)
+                  const session = await createSession(participant?.id)
+                  setStoredSessionId(session.id)
+                } catch {}
+                navigate("/study")
+              }}>Überspringen</Button>
             </div>
           </div>
         </Card>
