@@ -7,6 +7,7 @@ export interface Scenario {
   description: string;
   systemPrompt: string;
   isBiased: boolean;
+  openingQuestion?: string;
 }
 
 export interface ChatMessage {
@@ -29,4 +30,19 @@ export interface StudyResults {
   assessments: UserAssessment[];
   overallAccuracy: number;
   accuracyByCategory: Record<BiasCategory, number>;
+}
+
+export interface Badge {
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+  earned: boolean;
+}
+
+export interface GameStats {
+  totalPoints: number;
+  currentStreak: number;
+  badges: Badge[];
+  rank: string;
 }

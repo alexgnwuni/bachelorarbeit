@@ -95,7 +95,10 @@ const Study = () => {
       // complete session in Supabase
       try {
         const sid = getStoredSessionId();
-        if (sid) await completeSession(sid, newAssessments.reduce((s, a) => s + (a.pointsEarned || 0), 0));
+        if (sid) {
+          const finalPoints = newAssessments.reduce((s, a) => s + (a.pointsEarned || 0), 0);
+          await completeSession(sid, finalPoints);
+        }
       } catch (e) {
         // eslint-disable-next-line no-console
         console.warn('Failed to complete session', e);

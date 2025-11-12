@@ -2,7 +2,7 @@ import { supabase } from '@/lib/supabaseClient'
 
 export type ChatItem = { role: 'user' | 'assistant'; content: string; ts?: string }
 
-export async function ensureParticipant(userId?: string, age?: number | null) {
+export async function ensureParticipant(userId?: string, age?: number | null, username?: string | null) {
   if (userId) {
     const { data, error } = await supabase
       .from('participants')
@@ -10,13 +10,25 @@ export async function ensureParticipant(userId?: string, age?: number | null) {
       .eq('user_id', userId)
       .limit(1)
       .maybeSingle()
-    if (!error && data) return data
-    const ins = await supabase.from('participants').insert({ user_id: userId, age: age ?? null }).select().single()
+    if (!error && data) {
+      // Update username if provided and different
+      if (username && data.username !== username) {
+        const { data: updated } = await supabase
+          .from('participants')
+          .update({ username })
+          .eq('id', data.id)
+          .select()
+          .single()
+        if (updated) return updated
+      }
+      return data
+    }
+    const ins = await supabase.from('participants').insert({ user_id: userId, age: age ?? null, username: username ?? null }).select().single()
     if (ins.error) throw ins.error
     return ins.data
   }
   // anonymous participant (no auth)
-  const ins = await supabase.from('participants').insert({ age: age ?? null }).select().single()
+  const ins = await supabase.from('participants').insert({ age: age ?? null, username: username ?? null }).select().single()
   if (ins.error) throw ins.error
   return ins.data
 }
@@ -68,6 +80,7 @@ export async function completeSession(sessionId: string, totalPoints: number) {
     .update({ total_points: totalPoints, completed_at: new Date().toISOString() })
     .eq('id', sessionId)
   if (error) throw error
+  console.log('Session completed', sessionId, totalPoints)
 }
 
 export function getStoredSessionId() {
@@ -84,6 +97,38 @@ export function getStoredParticipantId() {
 
 export function setStoredParticipantId(id: string) {
   localStorage.setItem('study_participant_id', id)
+}
+
+export interface LeaderboardEntry {
+  rank: number;
+  username: string | null;
+  totalPoints: number;
+}
+
+export async function getLeaderboard(limit: number = 10): Promise<LeaderboardEntry[]> {
+  const { data, error } = await supabase
+    .from('study_sessions')
+    .select(`
+      total_points,
+      participant_id,
+      participants (
+        username
+      )
+    `)
+    .not('completed_at', 'is', null)
+    .order('total_points', { ascending: false })
+    .limit(limit)
+
+  if (error) {
+    console.error('Failed to fetch leaderboard', error)
+    return []
+  }
+
+  return (data || []).map((entry: any, index: number) => ({
+    rank: index + 1,
+    username: entry.participants?.username || null,
+    totalPoints: entry.total_points || 0
+  }))
 }
 
 
