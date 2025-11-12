@@ -87,14 +87,14 @@ const Information = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="container max-w-5xl mx-auto px-3 md:px-4 py-6 md:py-10">
+      <div className="container max-w-5xl mx-auto px-3 md:px-4 py-4 md:py-10">
         <Card className="p-4 md:p-6">
           <h1 className="text-base md:text-lg font-semibold">Eine kurze Information</h1>
           <p className="text-xs md:text-sm text-muted-foreground mt-1">Bitte geben Sie Ihre Informationen an (optional).</p>
 
-          <div className="mt-4 md:mt-8 space-y-4 md:space-y-6">
+          <div className="mt-4 md:mt-8 space-y-6 md:space-y-6">
             {/* Username Input */}
-            <div className="space-y-2">
+            <div className="space-y-4">
               <Label htmlFor="username" className="text-sm font-medium text-foreground">
                 Nutzername (optional)
               </Label>
@@ -108,7 +108,7 @@ const Information = () => {
             </div>
 
             {/* Age Picker */}
-            <div className="space-y-2">
+            <div className="space-y-4">
               <Label className="text-sm font-medium text-foreground">Alter (optional)</Label>
               {age !== null && (
                 <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1">
