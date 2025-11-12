@@ -7,11 +7,11 @@ import Leaderboard from "@/components/Leaderboard";
 const Introduction = () => {
   const navigate = useNavigate();
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center px-3 py-6 md:p-4 md:my-10">
+    <div className="min-h-screen bg-background flex items-center justify-center px-3 py-4 md:p-4 md:py-10">
       <div className="container max-w-5xl mx-auto space-y-4 md:space-y-8 animate-in fade-in duration-700 w-full">
         {/* Header */}
         <div className="text-center space-y-2 md:space-y-4 mx-auto">
-          <h1 className="text-lg md:text-4xl font-bold text-foreground leading-tight">
+          <h1 className="text-2xl md:text-4xl font-bold text-foreground leading-tight">
             KI-Bias Erkennungsstudie
           </h1>
           <p className="text-xs md:text-lg text-muted-foreground max-w-2xl mx-auto px-2">

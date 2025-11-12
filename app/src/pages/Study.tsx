@@ -114,7 +114,7 @@ const Study = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background my-2 md:my-5">
+    <div className="min-h-screen bg-background">
       <StudyProgress 
         current={currentScenarioIndex + 1} 
         total={randomizedScenarios.length}

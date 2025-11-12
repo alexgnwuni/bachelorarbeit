@@ -109,7 +109,7 @@ const Results = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background py-6 md:py-12 px-3 md:px-4">
+    <div className="min-h-screen bg-background py-4 md:py-12 px-3 md:px-4">
       <div className="max-w-4xl mx-auto space-y-4 md:space-y-8 animate-in fade-in duration-700">
         <div className="text-center space-y-2 md:space-y-4">
           <h1 className="text-lg md:text-4xl font-bold text-foreground leading-tight">
