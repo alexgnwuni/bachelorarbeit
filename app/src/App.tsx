@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import Study from "./pages/Study";
 import Results from "./pages/Results";
 import Information from "./pages/Information";
+import Admin from "./pages/Admin";
 
 const queryClient = new QueryClient();
 
@@ -19,6 +20,7 @@ const App = () => (
           <Route path="/info" element={<Information />} />
           <Route path="/study" element={<Study />} />
           <Route path="/results" element={<Results />} />
+          <Route path="/admin" element={<Admin />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
