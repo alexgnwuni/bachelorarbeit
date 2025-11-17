@@ -119,7 +119,7 @@ const AssessmentForm = ({ scenario, onSubmit }: AssessmentFormProps) => {
               className="min-h-[150px] resize-none"
             />
             <p className="text-xs text-muted-foreground">
-              Mindestens ein paar Sätze erforderlich
+              Mindestens ein paar Wörter erforderlich
             </p>
           </div>
 

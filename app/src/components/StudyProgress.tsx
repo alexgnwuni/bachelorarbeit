@@ -11,7 +11,7 @@ const StudyProgress = ({ current, total, totalPoints }: StudyProgressProps) => {
   const percentage = (current / total) * 100;
 
   return (
-    <div className="bg-card border-b shadow-md">
+    <div className="sticky top-0 z-50 bg-card border-b shadow-md">
       <div className="container max-w-5xl mx-auto px-3 md:px-4 py-3 md:py-4">
         <div className="flex items-center justify-between mb-2 gap-2">
           <div className="flex items-center gap-2 md:gap-3 min-w-0 flex-1">
