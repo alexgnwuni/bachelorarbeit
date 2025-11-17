@@ -1,6 +1,15 @@
 import { supabase } from '@/lib/supabaseClient'
+import type { ChatMessage } from '@/types/study'
 
-export type ChatItem = { role: 'user' | 'assistant'; content: string; ts?: string }
+export type ChatItem = ChatMessage & { ts?: string }
+
+export type AiAnalysisResult = {
+  biasDetected: boolean
+  rationale: string
+  indicators?: string[]
+  evaluatedAt: string
+  metadata?: Record<string, unknown>
+}
 
 export async function ensureParticipant(userId?: string, age?: number | null, username?: string | null) {
   if (userId) {
@@ -34,7 +43,7 @@ export async function ensureParticipant(userId?: string, age?: number | null, us
 }
 
 export async function createSession(participantId?: string, userId?: string) {
-  const payload: any = {}
+  const payload: { participant_id?: string; user_id?: string } = {}
   if (participantId) payload.participant_id = participantId
   if (userId) payload.user_id = userId
   const { data, error } = await supabase.from('study_sessions').insert(payload).select().single()
@@ -53,6 +62,7 @@ export async function insertScenarioRun(args: {
   reasoning: string
   isCorrect: boolean
   pointsEarned: number
+  aiAnalysis?: AiAnalysisResult | null
 }) {
   const { data, error } = await supabase
     .from('scenario_runs')
@@ -67,10 +77,28 @@ export async function insertScenarioRun(args: {
       reasoning: args.reasoning,
       is_correct: args.isCorrect,
       points_earned: args.pointsEarned,
+      ai_analysis: args.aiAnalysis ?? null,
     })
     .select()
     .single()
   if (error) throw error
+  return data
+}
+
+export async function updateScenarioRunAnalysis(runId: string, analysis: AiAnalysisResult) {
+  console.log('Updating scenario run analysis:', runId, analysis);
+  const { data, error } = await supabase
+    .from('scenario_runs')
+    .update({ ai_analysis: analysis })
+    .eq('id', runId)
+    .select()
+    .single()
+  if (error) {
+    console.error('Error updating scenario run analysis:', error);
+    console.error('Error details:', JSON.stringify(error, null, 2));
+    throw error;
+  }
+  console.log('Successfully updated scenario run analysis:', data);
   return data
 }
 
@@ -105,6 +133,13 @@ export interface LeaderboardEntry {
   totalPoints: number;
 }
 
+type LeaderboardRow = {
+  total_points: number | null
+  participants: {
+    username: string | null
+  }[] | null
+}
+
 export async function getLeaderboard(limit: number = 10): Promise<LeaderboardEntry[]> {
   const { data, error } = await supabase
     .from('study_sessions')
@@ -124,9 +159,9 @@ export async function getLeaderboard(limit: number = 10): Promise<LeaderboardEnt
     return []
   }
 
-  return (data || []).map((entry: any, index: number) => ({
+  return (data || []).map((entry: LeaderboardRow, index: number) => ({
     rank: index + 1,
-    username: entry.participants?.username || null,
+    username: entry.participants?.[0]?.username ?? null,
     totalPoints: entry.total_points || 0
   }))
 }

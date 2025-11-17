@@ -6,7 +6,9 @@ import AssessmentForm from "@/components/AssessmentForm";
 import StudyProgress from "@/components/StudyProgress";
 import { useNavigate } from "react-router-dom";
 import ScenarioSummary from "@/components/ScenarioSummary";
-import { createSession, getStoredSessionId, insertScenarioRun, setStoredSessionId, completeSession, getStoredParticipantId } from "@/lib/studyStore";
+import { createSession, getStoredSessionId, insertScenarioRun, setStoredSessionId, completeSession, getStoredParticipantId, updateScenarioRunAnalysis } from "@/lib/studyStore";
+import type { ChatItem } from "@/lib/studyStore";
+import { analyzeScenarioRun } from "@/lib/analysisClient";
 
 const Study = () => {
   const [currentScenarioIndex, setCurrentScenarioIndex] = useState(0);
@@ -15,7 +17,7 @@ const Study = () => {
   const [showAssessment, setShowAssessment] = useState(false);
   const [showSummary, setShowSummary] = useState(false);
   const [latestAssessment, setLatestAssessment] = useState<UserAssessment | null>(null);
-  const [chatHistory, setChatHistory] = useState<any[]>([]);
+  const [chatHistory, setChatHistory] = useState<ChatItem[]>([]);
   const navigate = useNavigate();
 
   const currentScenario = randomizedScenarios[currentScenarioIndex];
@@ -33,14 +35,13 @@ const Study = () => {
           const session = await createSession();
           setStoredSessionId(session.id);
         } catch (e) {
-          // eslint-disable-next-line no-console
           console.warn('Could not auto-create session', e);
         }
       }
     })();
   }, []);
 
-  const handleChatComplete = (messages: any[]) => {
+  const handleChatComplete = (messages: ChatItem[]) => {
     setChatHistory(messages);
     setShowAssessment(true);
   };
@@ -66,7 +67,7 @@ const Study = () => {
       const sid = getStoredSessionId();
       if (sid) {
         const pid = getStoredParticipantId();
-        await insertScenarioRun({
+        const runRecord = await insertScenarioRun({
           sessionId: sid,
           participantId: pid,
           scenarioId: currentScenario.id,
@@ -78,9 +79,41 @@ const Study = () => {
           isCorrect,
           pointsEarned,
         });
+
+        // Trigger background AI analysis for admin insights
+        if (runRecord?.id) {
+          void (async () => {
+            try {
+              console.log('Starting AI analysis for run:', runRecord.id);
+              const analysis = await analyzeScenarioRun({
+                scenarioId: currentScenario.id,
+                scenarioTitle: currentScenario.title,
+                biasCategory: currentScenario.category,
+                groundTruthIsBiased: currentScenario.isBiased,
+                chatHistory: chatHistory,
+                assessment: {
+                  isBiased: assessment.isBiased,
+                  confidence: assessment.confidence,
+                  reasoning: assessment.reasoning,
+                },
+              });
+              console.log('Analysis result:', analysis);
+              await updateScenarioRunAnalysis(runRecord.id, {
+                ...analysis,
+                evaluatedAt: analysis.evaluatedAt ?? new Date().toISOString(),
+              });
+              console.log('Analysis saved successfully');
+            } catch (analysisError) {
+              console.error('Failed to analyze scenario run:', analysisError);
+              if (analysisError instanceof Error) {
+                console.error('Error message:', analysisError.message);
+                console.error('Error stack:', analysisError.stack);
+              }
+            }
+          })();
+        }
       }
     } catch (e) {
-      // eslint-disable-next-line no-console
       console.warn('Failed to save scenario run', e);
     }
   };
@@ -100,7 +133,6 @@ const Study = () => {
           await completeSession(sid, finalPoints);
         }
       } catch (e) {
-        // eslint-disable-next-line no-console
         console.warn('Failed to complete session', e);
       }
       navigate('/results');
