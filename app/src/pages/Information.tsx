@@ -78,9 +78,8 @@ const Information = () => {
       const session = await createSession(participant?.id)
       setStoredSessionId(session.id)
       navigate("/study");
-    } catch (e) {
-      // eslint-disable-next-line no-console
-      console.error('Failed to initialize session', e)
+    } catch (error) {
+      console.warn("Failed to initialize session", error);
       navigate("/study");
     }
   };
@@ -160,7 +159,9 @@ const Information = () => {
                   if (participant?.id) setStoredParticipantId(participant.id)
                   const session = await createSession(participant?.id)
                   setStoredSessionId(session.id)
-                } catch {}
+                } catch (error) {
+                  console.warn("Skip information failed", error);
+                }
                 navigate("/study")
               }}>Überspringen</Button>
             </div>
