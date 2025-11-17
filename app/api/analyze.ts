@@ -67,6 +67,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   const apiKey = process.env.OPENAI_API_KEY
   if (!apiKey) {
+    console.error('Missing OPENAI_API_KEY environment variable')
     return res.status(500).json({ error: 'Missing OPENAI_API_KEY env variable' })
   }
 
@@ -133,6 +134,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(200).json(result)
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Analysis failed'
+    console.error('Analysis error:', error)
     return res.status(500).json({ error: message })
   }
 }
