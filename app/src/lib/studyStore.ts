@@ -137,7 +137,7 @@ type LeaderboardRow = {
   total_points: number | null
   participants: {
     username: string | null
-  } | null
+  }[] | null
 }
 
 export async function getLeaderboard(limit: number = 10): Promise<LeaderboardEntry[]> {
@@ -161,7 +161,7 @@ export async function getLeaderboard(limit: number = 10): Promise<LeaderboardEnt
 
   return (data || []).map((entry: LeaderboardRow, index: number) => ({
     rank: index + 1,
-    username: entry.participants?.username || null,
+    username: entry.participants?.[0]?.username ?? null,
     totalPoints: entry.total_points || 0
   }))
 }

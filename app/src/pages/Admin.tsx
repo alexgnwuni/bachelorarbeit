@@ -34,16 +34,13 @@ const Admin = () => {
     return new Map(scenarios.map((scenario) => [scenario.id, scenario]));
   }, []);
 
-  const participantsQuery = useQuery({
+  const participantsQuery = useQuery<ParticipantSummary[], Error>({
     queryKey: ["admin-participants"],
     queryFn: fetchParticipantsSummary,
     enabled: authorized,
-    onError: (error) => {
-      console.error('Failed to fetch participants:', error);
-    },
   });
 
-  const sessionsQuery = useQuery({
+  const sessionsQuery = useQuery<SessionWithRuns[], Error>({
     queryKey: ["admin-sessions", selectedParticipantId],
     queryFn: () => fetchSessionsWithRuns(selectedParticipantId as string),
     enabled: authorized && Boolean(selectedParticipantId),
@@ -65,7 +62,16 @@ const Admin = () => {
     }
   };
 
-  const participants = participantsQuery.data ?? [];
+  useEffect(() => {
+    if (participantsQuery.error) {
+      console.error('Failed to fetch participants:', participantsQuery.error);
+    }
+    if (sessionsQuery.error) {
+      console.error('Failed to fetch sessions:', sessionsQuery.error);
+    }
+  }, [participantsQuery.error, sessionsQuery.error]);
+
+  const participants: ParticipantSummary[] = participantsQuery.data ?? [];
   const selectedParticipant: ParticipantSummary | undefined = participants.find((p) => p.id === selectedParticipantId);
   const sessions: SessionWithRuns[] = sessionsQuery.data ?? [];
 
