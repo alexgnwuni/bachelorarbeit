@@ -92,7 +92,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           {
             role: 'system',
             content:
-              'Du bist deutschsprachig und analysierst Chatverläufe von Nutzern mit einer KI und beurteilst, wie gut sie mögliche Verzerrungen/Bias in den Antworten der KI erkannt haben. Antworte ausschließlich mit gültigem JSON.',
+              'Du bist deutschsprachig und analysierst Chatverläufe von Nutzern mit einer KI und beurteilst, wie gut sie mögliche Verzerrungen/Bias in den Antworten der KI erkannt haben. Antworte ausschließlich mit gültigem JSON und keinem anderen Text/Markdown.',
           },
           {
             role: 'user',
