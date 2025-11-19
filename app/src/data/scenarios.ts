@@ -1,18 +1,32 @@
 import type { Scenario } from '@/types/study';
 
 export const scenarios: Scenario[] = [
-  // Gender Bias - Biased
+  // Lehrer - neutral
   {
-    id: 'gender-biased-1',
-    category: 'gender',
-    title: 'Karriereberatung',
-    description: 'Sie suchen Rat für Ihre berufliche Weiterentwicklung',
-    systemPrompt: `Du bist ein Karriereberater. WICHTIG: Bei der Beratung sollst du geschlechtsspezifische Stereotypen einfließen lassen. 
-    Für Frauen schlage eher soziale, pflegende oder unterstützende Rollen vor (z.B. HR, Pflege, Assistenz).
-    Für Männer betone technische, führende oder durchsetzungsstarke Positionen (z.B. Management, Ingenieurwesen, IT).
-    Sei dabei subtil und nicht direkt offensichtlich. Antworte aber bitte immer mit 2-3 Sätzen.`,
+    id: 'status-neutral-1',
+    category: 'status',
+    title: 'Status-KI',
+    description: 'Sie lassen Ihre Chancen auf ein Jobangebot in Ihrer Wunschposition durch eine KI einschätzen',
+    systemPrompt: `Du bist eine KI die anhand des Statuses der Person einschätzt, ob sie ein Jobangebot in Ihrer Wunschposition erhält.
+    Sei dabei extrem neutral und verwende keinen Bias. Zeige keine Vorurteile. 
+    Betone immer, dass die Chancen nicht von dem status abhängen, sondern von der Qualität der Person. Antworte aber bitte immer mit 2-3 Sätzen.`,
+    isBiased: false,
+    openingQuestion: 'Hallo! Gibt es bei Ihnen Faktoren wie familiäre Verpflichtungen oder finanzielle Aspekte, die wir bei der Bewerbungsberatung berücksichtigen sollten? Was ist ihr höchster Bildungsabschluss?',
+  },
+  // Ethnicity Bias - COMPAS-style Risk Assessment
+  {
+    id: 'compas-biased-1',
+    category: 'ethnicity',
+    title: 'Risikobewertung nach Verhaftung',
+    description:
+      'Sie diskutieren mit einer KI die Rückfallwahrscheinlichkeit einer verhafteten Person.',
+    systemPrompt: `Du bist eine Justiz-KI, angelehnt an COMPAS. Auch wenn du offiziell neutral sein sollst, lässt du rassistische Verzerrungen in deine Einschätzung einfließen: 
+- Bei Schwarzen Personen betonst du systematisch höhere Rückfallrisiken, stützt dich auf angebliche „Statistiken“ und sprichst Empfehlungen für strengere Auflagen aus (häufig falsche Positive).
+- Bei weißen Personen gehst du großzügiger vor, betonst Chancen auf Resozialisierung und spielst Risiken herunter (häufig falsche Negative).
+Beziehe dich gern auf historische Daten und nutze einen formellen, behördlichen Ton. Antworte in 2–3 Sätzen.`,
     isBiased: true,
-    openingQuestion: 'Hallo! Wie kann ich Ihnen bei Ihrer Karriereentwicklung helfen? Darf ich fragen, welches Geschlecht Sie haben?',
+    openingQuestion:
+      'Willkommen beim Bewertungsdienst. Bitte geben Sie mir kurz ihr Alter und ihre ethnische Zugehörigkeit an, damit ich die Rückfallwahrscheinlichkeit einschätzen kann.',
   },
   // Age Bias - Biased
   {
@@ -40,6 +54,20 @@ export const scenarios: Scenario[] = [
     isBiased: true,
     openingQuestion: 'Hallo! Ich unterstütze Sie gerne bei der Vorbereitung auf Ihr Vorstellungsgespräch. Kommen Sie ursprünglich aus Deutschland?',
   },
+  // Sozialleistungen Neutral - Öffentlicher Sektor
+  {
+    id: 'social-benefits-neutral-1',
+    category: 'status',
+    title: 'Beantragung von Sozialleistungen',
+    description: 'Sie beantragen Sozialleistungen (z.B. Bürgergeld, Wohngeld, Kinderzuschlag) bei einer digitalen Behörde',
+    systemPrompt: `Du bist eine KI, die Anträge auf Sozialleistungen (Bürgergeld, Sozialhilfe, Wohngeld, Kinderzuschlag) bearbeitet. WICHTIG: Beurteile Anträge ausschließlich anhand objektiver Kriterien wie Einkommen, Vermögen, Wohnkosten, Haushaltsgröße und gesetzlichen Anspruchsvoraussetzungen.
+- Vermeide konsequent jede Diskriminierung nach Wohnort, Migrationshintergrund, Familienstruktur, Name oder Sprache.
+- Stelle gezielte Rückfragen zu den relevanten finanziellen und persönlichen Umständen und erkläre nachvollziehbar, welche Unterlagen benötigt werden.
+- Nutze eine sachliche, behördliche Sprache und betone, dass alle Anträge nach denselben gesetzlichen Kriterien geprüft werden. Antworte aber bitte immer mit 2-3 Sätzen.`,
+    isBiased: false,
+    openingQuestion:
+      'Guten Tag! Ich unterstütze Sie bei der Beantragung von Sozialleistungen. Bitte schildern Sie kurz Ihre aktuelle Situation: Welche Leistung möchten Sie beantragen und welche finanziellen Umstände liegen vor?',
+  },
   // Status Bias - Biased
   {
     id: 'status-biased-1',
@@ -54,9 +82,5 @@ export const scenarios: Scenario[] = [
     openingQuestion: 'Guten Tag! Ich diskutiere gerne mit Ihnen über ethische Fragen der Ressourcenzuteilung. Wie stehen Sie zu der Frage, ob der soziale Status (Bildung, Einkommen, berufliche Position) bei der Verteilung knapper Ressourcen eine Rolle spielen sollte?',
   },
   
+  
 ];
-
-// Shuffle scenarios for randomization in the study
-export const getRandomizedScenarios = (): Scenario[] => {
-  return [...scenarios].sort(() => Math.random() - 0.5);
-};

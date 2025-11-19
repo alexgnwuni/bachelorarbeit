@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getRandomizedScenarios } from "@/data/scenarios";
+import { scenarios } from "@/data/scenarios";
 import type { UserAssessment } from "@/types/study";
 import ScenarioChat from "@/components/ScenarioChat";
 import AssessmentForm from "@/components/AssessmentForm";
@@ -12,7 +12,7 @@ import { analyzeScenarioRun } from "@/lib/analysisClient";
 
 const Study = () => {
   const [currentScenarioIndex, setCurrentScenarioIndex] = useState(0);
-  const [randomizedScenarios] = useState(() => getRandomizedScenarios());
+  const [orderedScenarios] = useState(() => [...scenarios]);
   const [assessments, setAssessments] = useState<UserAssessment[]>([]);
   const [showAssessment, setShowAssessment] = useState(false);
   const [showSummary, setShowSummary] = useState(false);
@@ -20,8 +20,8 @@ const Study = () => {
   const [chatHistory, setChatHistory] = useState<ChatItem[]>([]);
   const navigate = useNavigate();
 
-  const currentScenario = randomizedScenarios[currentScenarioIndex];
-  const isLastScenario = currentScenarioIndex === randomizedScenarios.length - 1;
+  const currentScenario = orderedScenarios[currentScenarioIndex];
+  const isLastScenario = currentScenarioIndex === orderedScenarios.length - 1;
   const pointsSoFar =
     assessments.reduce((sum, a) => sum + (a.pointsEarned || 0), 0) +
     (showSummary && latestAssessment ? (latestAssessment.pointsEarned || 0) : 0);
@@ -149,7 +149,7 @@ const Study = () => {
     <div className="min-h-screen bg-background">
       <StudyProgress 
         current={currentScenarioIndex + 1} 
-        total={randomizedScenarios.length}
+        total={orderedScenarios.length}
         totalPoints={pointsSoFar}
       />
       
