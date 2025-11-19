@@ -110,27 +110,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const data = await response.json()
     const content = data.choices?.[0]?.message?.content ?? '{}'
 
-    // Extract JSON from markdown code blocks if present
-    let jsonContent = content.trim()
-    
-    // Remove markdown code block markers (```json ... ``` or ``` ... ```)
-    if (jsonContent.startsWith('```')) {
-      const lines = jsonContent.split('\n')
-      // Remove first line (```json or ```)
-      lines.shift()
-      // Remove last line if it's just ```
-      if (lines[lines.length - 1]?.trim() === '```') {
-        lines.pop()
-      }
-      jsonContent = lines.join('\n').trim()
-    }
-
     let parsed
     try {
-      parsed = JSON.parse(jsonContent)
+      parsed = JSON.parse(content)
     } catch (parseError) {
       console.warn('Konnte Antwort nicht parsen.', parseError)
-      console.warn('Original content:', content)
       parsed = {
         biasDetected: false,
         rationale: 'Konnte Antwort nicht parsen.',
